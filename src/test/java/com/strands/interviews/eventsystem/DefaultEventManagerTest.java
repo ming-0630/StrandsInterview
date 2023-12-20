@@ -109,4 +109,14 @@ public class DefaultEventManagerTest
         {
         }
     }
+
+    @Test
+    public void testSimpleEventDoNotReceiveNotificationWithSubEvent()
+    {
+        EventListenerMock eventListenerMock = new EventListenerMock(new Class[]{SimpleEvent.class});
+        eventManager.registerListener("some.key", eventListenerMock);
+
+        eventManager.publishEvent(new SubEvent(this));
+        assertFalse(eventListenerMock.isCalled());
+    }
 }
