@@ -1,5 +1,6 @@
 package com.strands.interviews.eventsystem;
 
+import com.strands.interviews.eventsystem.events.CreationEvent;
 import com.strands.interviews.eventsystem.events.SimpleEvent;
 import com.strands.interviews.eventsystem.events.SubEvent;
 import com.strands.interviews.eventsystem.impl.DefaultEventManager;
@@ -118,5 +119,17 @@ public class DefaultEventManagerTest
 
         eventManager.publishEvent(new SubEvent(this));
         assertFalse(eventListenerMock.isCalled());
+    }
+    @Test
+    public void testEmptyClassListenerListenToAllEvents()
+    {
+        EventListenerMock eventListenerMock = new EventListenerMock(new Class[]{});
+        eventManager.registerListener("some.key", eventListenerMock);
+
+        eventManager.publishEvent(new SubEvent(this));
+        eventManager.publishEvent(new SimpleEvent(this));
+        eventManager.publishEvent(new CreationEvent(this));
+
+        assertEquals(3, eventListenerMock.count);
     }
 }
